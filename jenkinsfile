@@ -1,0 +1,33 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('SCM') {
+            steps {
+                git branch: 'master', changelog: false, poll: false, 
+                    url: 'https://github.com/rahulsinha-lko/Node-Js.git'
+            }
+        }
+
+        stage('Docker Build and Push') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh """
+                            docker build -t rahuldss88/react_jenkins:latest .
+                            docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+                            docker push rahuldss88/react_jenkins:latest
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to Minikube') {
+            steps {
+                sh 'kubectl apply -f deployment.yml'
+                sh 'kubectl port-forward pod/my-react-deployments-749dc4cd4d-8p88h 3000:3000 &'
+            }
+        }
+    }
+}
