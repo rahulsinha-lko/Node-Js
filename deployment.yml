@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: my-react-app-latestss
-          image: rahuldss88/react_jenkins:v1
+          image: rahuldss88/react_jenkins:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
