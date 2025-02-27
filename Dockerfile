@@ -1,26 +1,16 @@
-# Step 1: Use Node.js to build the app
-FROM node:18-alpine AS build
+FROM node:20
 
-WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm install --legacy-peer-deps
+
+WORKDIR /myapp
+
 
 COPY . .
-RUN npm run build
 
-# Step 2: Use Node.js to serve the React app
-FROM node:18-alpine
 
-WORKDIR /app
+RUN npm install
 
-# Install a simple Express server
-RUN npm install -g serve
 
-# Copy the built files from the previous stage
-COPY --from=build /app/build .
-
-# Expose port 3000
 EXPOSE 3000
 
-# Serve the app
-CMD ["serve", "-s", ".", "-l", "3000"]
+
+CMD ["npm", "start"]
