@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: my-react-deployments
+  namespace: default  # Ensure it runs in the default namespace
 spec:
   replicas: 1
   selector:
@@ -13,7 +14,7 @@ spec:
         app: my-react-deployments
     spec:
       containers:
-        - name: my-react-app-latestss
+        - name: my-react-app
           image: rahuldss88/react_jenkins:latest
           imagePullPolicy: Always
           ports:
